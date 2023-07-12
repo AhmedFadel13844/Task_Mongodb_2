@@ -123,3 +123,55 @@ exports.getOne= async(req, res)=>{
         })
     }
 }
+
+exports.getAll= async(req, res)=>{
+    try{
+        const users= await User.find()
+
+        res.status(200).json({
+            status: 'success',
+            users
+        })
+    }catch(err){
+        res.status(404).json({
+            error: err.message
+        })
+    }
+}
+
+exports.updateUser= async(req, res)=>{
+    try{
+
+        const user= await User.findByIdAndUpdate(req.params.id,req.body, {
+            new: true,
+            runValidators: true
+        } )
+
+        if(!user) throw new Error("There is no user with given id")
+
+        res.status(200).json({
+            status: 'success',
+            user
+        })
+    }catch(err){
+        res.status(404).json({
+            error: err.message
+        })
+    }
+}
+exports.deleteUser= async(req, res)=>{
+    try{
+
+        const user= await User.findByIdAndDelete(req.params.id)
+
+        if(!user) throw new Error("There is no user with given id")
+
+        res.status(200).json({
+            status: 'success'
+        })
+    }catch(err){
+        res.status(404).json({
+            error: err.message
+        })
+    }
+}
